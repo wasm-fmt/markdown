@@ -44,3 +44,6 @@ strip         = "symbols"
 harness = false
 name    = "specs"
 path    = "tests/spec_test.rs"
+
+[patch.crates-io]
+regex = { path = "crates/regex_patch" }
