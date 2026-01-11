@@ -65,15 +65,24 @@ fn format_code_block_text(
     }
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const CONFIG_TYPES: &str = r#"
+import type { Config } from "./markdown_config.d.ts";
+export type { Config };
+"#;
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "Config")]
+    pub type Config;
+}
+
 /// Formats the given markdown code with the provided Configuration.
 #[wasm_bindgen]
 pub fn format(
     #[wasm_bindgen(param_description = "The markdown code to format")] code: &str,
-    #[wasm_bindgen(param_description = "Optional formatter config")]
-    #[wasm_bindgen(unchecked_param_type = "Config | null | undefined")]
-    config: Option<JsValue>,
+    #[wasm_bindgen(param_description = "Optional formatter config")] config: Option<Config>,
 ) -> Result<Option<String>, String> {
-    let config = resolve_wasm_config(config)?;
+    let config = resolve_wasm_config(config.map(Into::into))?;
 
     format_internal(code, config)
 }
