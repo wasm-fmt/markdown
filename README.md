@@ -44,9 +44,13 @@ import init, { format } from "@wasm-fmt/markdown/web";
 
 await init();
 
-const input = `#  Hello World
+const input = `#  Hello wasm-fmt
 
-This is   a test.`;
+1. markdown
+2. clang-format
+2. gofmt
+2. ruff_fmt
+`;
 
 const formatted = format(input);
 console.log(formatted);
