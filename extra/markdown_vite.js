@@ -1,0 +1,42 @@
+/* @ts-self-types="./markdown_web.d.ts" */
+/**
+ * Loads the Wasm module for Vite and bundlers supporting `?init` imports.
+ * @module
+ */
+import init from "./markdown_bg.wasm?init";
+import * as import_bg from "./markdown_bg.js";
+const { __wbg_set_wasm, format, set_format_code_block, ...wasmImport } = import_bg;
+
+let wasm, wasmModule;
+
+function getImports() {
+	return {
+		__proto__: null,
+		"./markdown_bg.js": wasmImport,
+	};
+}
+
+function finalize_init(instance, module) {
+	wasm = instance.exports;
+	wasmModule = module;
+	__wbg_set_wasm(wasm);
+	return wasm;
+}
+
+export default async function initAsync() {
+	if (wasm !== void 0) return wasm;
+	const instance = await init(getImports());
+	return finalize_init(instance);
+}
+
+export function initSync(module) {
+	if (wasm !== void 0) return wasm;
+
+	if (!(module instanceof WebAssembly.Module)) {
+		module = new WebAssembly.Module(module);
+	}
+	const instance = new WebAssembly.Instance(module, getImports());
+	return finalize_init(instance, module);
+}
+
+export { format, set_format_code_block };
