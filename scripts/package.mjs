@@ -41,10 +41,7 @@ pkg_json.exports = {
 		types: "./markdown_web.d.ts",
 		default: "./markdown_vite.js",
 	},
-	"./wasm": {
-		types: "./markdown_bg.wasm.d.ts",
-		default: "./markdown_bg.wasm",
-	},
+	"./wasm": "./markdown_bg.wasm",
 	"./package.json": "./package.json",
 	"./*": "./*",
 };

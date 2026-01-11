@@ -1,8 +1,9 @@
+#!/usr/bin/env node --test
 import assert from "node:assert/strict";
 import { glob, readFile } from "node:fs/promises";
 import { relative } from "node:path";
-import { fileURLToPath } from "node:url";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 
 import { filterOnlySpecs, formatOrSame, installDefaultFormatCodeBlock, parseSpecs } from "../test_utils/index.mjs";
 

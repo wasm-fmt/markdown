@@ -1,6 +1,7 @@
+#!/usr/bin/env deno test --allow-read --parallel
+import { assertEquals } from "jsr:@std/assert";
 import { expandGlob } from "jsr:@std/fs";
 import { fromFileUrl } from "jsr:@std/path";
-import { assertEquals } from "jsr:@std/assert";
 import { filterOnlySpecs, formatOrSame, installDefaultFormatCodeBlock, parseSpecs } from "../test_utils/index.mjs";
 
 import { format, set_format_code_block } from "../pkg/markdown_esm.js";

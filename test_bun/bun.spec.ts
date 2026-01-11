@@ -1,7 +1,8 @@
+#!/usr/bin/env bun test
+import { Glob } from "bun";
+import { expect, test } from "bun:test";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { expect, test } from "bun:test";
-import { Glob } from "bun";
 
 import { filterOnlySpecs, formatOrSame, installDefaultFormatCodeBlock, parseSpecs } from "../test_utils/index.mjs";
 
