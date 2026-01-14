@@ -68,7 +68,7 @@ fn format_code_block_text(
 #[wasm_bindgen(typescript_custom_section)]
 const CONFIG_TYPES: &str = r#"
 import type { Config } from "./markdown_config.d.ts";
-export type { Config };
+export type * from "./markdown_config.d.ts";
 "#;
 #[wasm_bindgen]
 extern "C" {

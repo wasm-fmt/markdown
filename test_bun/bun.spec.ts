@@ -11,16 +11,14 @@ import init, { format, set_format_code_block } from "../pkg/markdown_web.js";
 await init();
 installDefaultFormatCodeBlock(set_format_code_block);
 
-const specsRoot = fileURLToPath(import.meta.resolve("../tests/specs"));
-const glob = new Glob("**/*.txt");
+const specs_root = fileURLToPath(import.meta.resolve("../tests/specs"));
 
-for await (const relativePath of glob.scan({ cwd: specsRoot })) {
-	const specFilePath = join(specsRoot, relativePath);
-	const fileText = await Bun.file(specFilePath).text();
+for await (const spec_path of new Glob("**/*.txt").scan({ cwd: specs_root })) {
+	const fileText = await Bun.file(`${specs_root}/${spec_path}`).text();
 	const specs = filterOnlySpecs(parseSpecs(fileText, { defaultFileName: "file.md" }));
 
 	for (const spec of specs) {
-		const testName = `${relativePath} :: ${spec.message}`;
+		const testName = `${spec_path} :: ${spec.message}`;
 
 		if (spec.skip) {
 			test.skip(testName, () => {});

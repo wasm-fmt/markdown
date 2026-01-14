@@ -1,7 +1,6 @@
 #!/usr/bin/env node --test
 import assert from "node:assert/strict";
 import { glob, readFile } from "node:fs/promises";
-import { relative } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
@@ -11,15 +10,14 @@ import { format, set_format_code_block } from "../pkg/markdown_node.js";
 
 installDefaultFormatCodeBlock(set_format_code_block);
 
-const specsRoot = fileURLToPath(import.meta.resolve("../tests/specs"));
+const specs_root = fileURLToPath(import.meta.resolve("../tests/specs"));
 
-for await (const specFilePath of glob(`${specsRoot}/**/*.txt`)) {
-	const relativePath = relative(specsRoot, specFilePath);
-	const fileText = await readFile(specFilePath, "utf-8");
+for await (const spec_path of glob("**/*.txt", { cwd: specs_root })) {
+	const fileText = await readFile(`${specs_root}/${spec_path}`, "utf-8");
 	const specs = filterOnlySpecs(parseSpecs(fileText, { defaultFileName: "file.md" }));
 
 	for (const spec of specs) {
-		const testName = `${relativePath} :: ${spec.message}`;
+		const testName = `${spec_path} :: ${spec.message}`;
 
 		if (spec.skip) {
 			test(testName, { skip: true }, () => {});

@@ -1,8 +1,4 @@
 /* @ts-self-types="./markdown_web.d.ts" */
-/**
- * Loads the Wasm module for Vite and bundlers supporting `?init` imports.
- * @module
- */
 import init from "./markdown_bg.wasm?init";
 import * as import_bg from "./markdown_bg.js";
 const { __wbg_set_wasm, format, set_format_code_block, ...wasmImport } = import_bg;

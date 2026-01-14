@@ -1,9 +1,4 @@
 /* @ts-self-types="./markdown_web.d.ts" */
-/**
- * Loads the Wasm module via Web Fetch API (browsers).
- * Requires calling init().
- * @module
- */
 import * as import_bg from "./markdown_bg.js";
 const { __wbg_set_wasm, format, set_format_code_block, ...wasmImport } = import_bg;
 
@@ -65,32 +60,32 @@ function finalize_init(instance, module) {
 	return wasm;
 }
 
-export function initSync(module) {
+export function initSync(module_or_buffer) {
 	if (wasm !== void 0) return wasm;
 
-	if (!(module instanceof WebAssembly.Module)) {
-		module = new WebAssembly.Module(module);
+	if (!(module_or_buffer instanceof WebAssembly.Module)) {
+		module_or_buffer = new WebAssembly.Module(module_or_buffer);
 	}
-	const instance = new WebAssembly.Instance(module, getImports());
-	return finalize_init(instance, module);
+	const instance = new WebAssembly.Instance(module_or_buffer, getImports());
+	return finalize_init(instance, module_or_buffer);
 }
 
-export default async function initAsync(module_or_path) {
+export default async function initAsync(init_input) {
 	if (wasm !== void 0) return wasm;
 
-	if (module_or_path === void 0) {
-		module_or_path = new URL("markdown_bg.wasm", import.meta.url);
+	if (init_input === void 0) {
+		init_input = new URL("markdown_bg.wasm", import.meta.url);
 	}
 
 	if (
-		typeof module_or_path === "string" ||
-		(typeof Request === "function" && module_or_path instanceof Request) ||
-		(typeof URL === "function" && module_or_path instanceof URL)
+		typeof init_input === "string" ||
+		(typeof Request === "function" && init_input instanceof Request) ||
+		(typeof URL === "function" && init_input instanceof URL)
 	) {
-		module_or_path = fetch(module_or_path);
+		init_input = fetch(init_input);
 	}
 
-	const { instance, module } = await load(await module_or_path, getImports());
+	const { instance, module } = await load(await init_input, getImports());
 
 	return finalize_init(instance, module);
 }

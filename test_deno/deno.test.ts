@@ -1,7 +1,7 @@
 #!/usr/bin/env deno test --allow-read --parallel
 import { assertEquals } from "jsr:@std/assert";
 import { expandGlob } from "jsr:@std/fs";
-import { fromFileUrl } from "jsr:@std/path";
+import { fromFileUrl, relative } from "jsr:@std/path";
 import { filterOnlySpecs, formatOrSame, installDefaultFormatCodeBlock, parseSpecs } from "../test_utils/index.mjs";
 
 import { format, set_format_code_block } from "../pkg/markdown_esm.js";
@@ -10,8 +10,10 @@ installDefaultFormatCodeBlock(set_format_code_block);
 
 const specs_root = fromFileUrl(import.meta.resolve("../tests/specs"));
 
-for await (const { path: spec_path } of expandGlob(`${specs_root}/**/*.txt`)) {
-	const relativePath = spec_path.slice(specs_root.length + 1);
+for await (const { path: spec_path } of expandGlob("**/*.txt", {
+	root: specs_root,
+})) {
+	const relativePath = relative(specs_root, spec_path);
 	const fileText = await Deno.readTextFile(spec_path);
 	const specs = filterOnlySpecs(parseSpecs(fileText, { defaultFileName: "file.md" }));
 

@@ -15,10 +15,19 @@ pkg_json.publishConfig = {
 	access: "public",
 };
 pkg_json.exports = {
+	// Deno
+	// - 2.6 supports wasm source phase imports
+	// - 2.1 support wasm instance phase imports
+	// Node.js
+	// - 24.5.0 unflag source phase imports for webassembly
+	// - 24.0.0 supports source phase imports for webassembly
+	// - 22.19.0 backport source/instance phase imports for webassembly
 	".": {
 		types: "./markdown.d.ts",
-		node: "./markdown_node.js",
 		webpack: "./markdown.js",
+		deno: "./markdown.js",
+		// CJS supports
+		"module-sync": "./markdown_node.js",
 		default: "./markdown_esm.js",
 	},
 	"./esm": {
@@ -45,6 +54,7 @@ pkg_json.exports = {
 	"./package.json": "./package.json",
 	"./*": "./*",
 };
+pkg_json.sideEffects = ["./markdown.js", "./markdown_node.js", "./markdown_esm.js"];
 
 fs.writeFileSync(pkg_path, JSON.stringify(pkg_json, null, "\t"));
 
@@ -52,18 +62,27 @@ fs.writeFileSync(pkg_path, JSON.stringify(pkg_json, null, "\t"));
 const jsr_path = path.resolve(pkg_path, "..", "jsr.jsonc");
 pkg_json.name = "@fmt/markdown";
 pkg_json.exports = {
-	".": "./markdown_esm.js",
+	".": "./markdown.js",
 	"./esm": "./markdown_esm.js",
 	"./node": "./markdown_node.js",
 	"./bundler": "./markdown.js",
 	"./web": "./markdown_web.js",
 	// jsr does not support imports from wasm?init
 	// "./vite": "./markdown_vite.js",
-	"./wasm": "./markdown_bg.wasm",
 };
 pkg_json.exclude = ["!**", "*.tgz"];
 fs.writeFileSync(jsr_path, JSON.stringify(pkg_json, null, "\t"));
 
 const markdown_path = path.resolve(path.dirname(pkg_path), "markdown.js");
-let markdown_text = fs.readFileSync(markdown_path, { encoding: "utf-8" });
-fs.writeFileSync(markdown_path, '/* @ts-self-types="./markdown.d.ts" */\n' + markdown_text);
+prependTextToFile('/* @ts-self-types="./markdown.d.ts" */\n', markdown_path);
+
+const markdown_d_ts_path = path.resolve(path.dirname(pkg_path), "markdown.d.ts");
+const doc_path = path.resolve(import.meta.dirname, "doc.d.ts");
+const doc_text = fs.readFileSync(doc_path, { encoding: "utf-8" });
+prependTextToFile(doc_text + "\n", markdown_d_ts_path);
+
+function prependTextToFile(text, filePath) {
+	const originalContent = fs.readFileSync(filePath, { encoding: "utf-8" });
+	const newContent = text + originalContent;
+	fs.writeFileSync(filePath, newContent);
+}

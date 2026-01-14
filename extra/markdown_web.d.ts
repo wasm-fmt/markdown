@@ -1,7 +1,33 @@
+/**
+ * WASM formatter for Markdown using dprint.
+ *
+ * Import this module and call init function before using.
+ *
+ * @example
+ * ```ts
+ * import init, { format } from "@wasm-fmt/markdown/web";
+ *
+ * await init();
+ *
+ * const input = "# Hello World\n\n  This is markdown.";
+ * const output = format(input);
+ * ```
+ *
+ * @module
+ */
 import type * as InitOutput from "./markdown_bg.wasm.d.ts";
 declare type InitOutput = typeof InitOutput;
 
+/**
+ * Input types for asynchronous WASM initialization.
+ * Can be a URL/path to fetch, a Response object, raw bytes, or a pre-compiled WebAssembly.Module.
+ */
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
+
+/**
+ * Input types for synchronous WASM initialization.
+ * Must be raw bytes (BufferSource) or a pre-compiled WebAssembly.Module.
+ */
 export type SyncInitInput = BufferSource | WebAssembly.Module;
 
 /**

@@ -1,9 +1,4 @@
 /* @ts-self-types="./markdown.d.ts" */
-/**
- * Loads the Wasm module using Node's fs API.
- * Consider using `./esm` entry if your environment supports source phase import.
- * @module
- */
 import { readFileSync } from "node:fs";
 import * as import_bg from "./markdown_bg.js";
 const { __wbg_set_wasm, format, set_format_code_block, ...wasmImport } = import_bg;
