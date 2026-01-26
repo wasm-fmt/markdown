@@ -1,0 +1,63 @@
+{
+	"name": "@wasm-fmt/markdown",
+	"type": "module",
+	"collaborators": [
+		"magic-akari <akari.ccino@gmail.com>"
+	],
+	"description": "A WASM Based Markdown Formatter",
+	"version": "0.1.4",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/wasm-fmt/markdown.git"
+	},
+	"homepage": "https://github.com/wasm-fmt/markdown",
+	"types": "markdown.d.ts",
+	"sideEffects": [
+		"./markdown.js",
+		"./markdown_node.js",
+		"./markdown_esm.js"
+	],
+	"keywords": [
+		"wasm",
+		"markdown",
+		"formatter"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"exports": {
+		".": {
+			"types": "./markdown.d.ts",
+			"webpack": "./markdown.js",
+			"deno": "./markdown.js",
+			"bun": "./markdown_node.js",
+			"module-sync": "./markdown_node.js",
+			"node": "./markdown_node.js",
+			"default": "./markdown_esm.js"
+		},
+		"./esm": {
+			"types": "./markdown.d.ts",
+			"default": "./markdown_esm.js"
+		},
+		"./node": {
+			"types": "./markdown.d.ts",
+			"default": "./markdown_node.js"
+		},
+		"./bundler": {
+			"types": "./markdown.d.ts",
+			"default": "./markdown.js"
+		},
+		"./web": {
+			"types": "./markdown_web.d.ts",
+			"default": "./markdown_web.js"
+		},
+		"./vite": {
+			"types": "./markdown_web.d.ts",
+			"default": "./markdown_vite.js"
+		},
+		"./wasm": "./markdown_bg.wasm",
+		"./package.json": "./package.json",
+		"./*": "./*"
+	}
+}

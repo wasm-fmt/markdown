@@ -1,0 +1,22 @@
+{
+	"$schema": "https://jsr.io/schema/config-file.v1.json",
+	"name": "@fmt/markdown",
+	"version": "0.1.4",
+	"exports": {
+		".": "./markdown.js",
+		"./esm": "./markdown_esm.js",
+		"./node": "./markdown_node.js",
+		"./bundler": "./markdown.js",
+		"./web": "./markdown_web.js"
+	},
+	"publish": {
+		"include": [
+			"markdown_*",
+			"markdown.*",
+			"README.md"
+		],
+		"exclude": [
+			"!*"
+		]
+	}
+}
