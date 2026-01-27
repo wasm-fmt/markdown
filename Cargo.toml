@@ -8,7 +8,7 @@ license     = "MIT"
 name        = "markdown"
 readme      = "README.md"
 repository  = "https://github.com/wasm-fmt/markdown"
-version     = "0.1.4"
+version     = "0.1.5"
 
 
 [dependencies]
