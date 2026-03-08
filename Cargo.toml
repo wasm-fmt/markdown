@@ -14,7 +14,7 @@ version     = "0.1.5"
 [dependencies]
 anyhow                 = "1"
 dprint-core            = "0.67.4"
-dprint-plugin-markdown = "0.20.0"
+dprint-plugin-markdown = "0.21.0"
 js-sys                 = "0.3"
 serde-wasm-bindgen     = "0.6"
 wasm-bindgen           = "0.2"
