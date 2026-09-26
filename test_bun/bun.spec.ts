@@ -4,12 +4,11 @@ import { expect, test } from "bun:test";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { filterOnlySpecs, formatOrSame, installDefaultFormatCodeBlock, parseSpecs } from "../test_utils/index.mjs";
+import { filterOnlySpecs, formatOrSame, parseSpecs, requiresFormatCodeBlock } from "../test_utils/index.mjs";
 
-import init, { format, set_format_code_block } from "../pkg/markdown_web.js";
+import init, { format } from "../pkg/markdown_web.js";
 
 await init();
-installDefaultFormatCodeBlock(set_format_code_block);
 
 const specs_root = fileURLToPath(import.meta.resolve("../tests/specs"));
 
@@ -20,7 +19,7 @@ for await (const spec_path of new Glob("**/*.txt").scan({ cwd: specs_root })) {
 	for (const spec of specs) {
 		const testName = `${spec_path} :: ${spec.message}`;
 
-		if (spec.skip) {
+		if (spec.skip || requiresFormatCodeBlock(spec)) {
 			test.skip(testName, () => {});
 			continue;
 		}

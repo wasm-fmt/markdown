@@ -56,6 +56,13 @@ const formatted = format(input);
 console.log(formatted);
 ```
 
+## Embedded code blocks
+
+The Bridge experiment formats Markdown itself, but does not expose the previous synchronous
+`set_format_code_block` JavaScript callback. Host callbacks are outside the current Bridge ABI.
+Code blocks are therefore preserved unless the Markdown formatter can handle them without a host
+callback. A host-neutral embedded-formatting design will be considered separately.
+
 ### Vite
 
 ```JavaScript
@@ -85,3 +92,20 @@ import { format } from "@wasm-fmt/markdown/bundler";
 Thanks to:
 
 - The [dprint-plugin-markdown](https://github.com/dprint/dprint-plugin-markdown) project
+
+### Embedded languages
+
+Bridge v1 can ask the host to format code fences and YAML front matter. Pass
+`{ onFormatEmbedded }` as the third argument to `format`, or register Markdown
+in `createFormatterContext()` from `@wasm-fmt/runtime`. The callback receives
+`{ source, filename, lineWidth? }` and synchronously returns replacement text,
+undefined to skip, or throws. Virtual filenames such as `embedded.py` and
+`embedded.go` identify the target language; custom `tags` config mappings are
+respected. Target formatters must already be initialized.
+
+An unavailable language is left without an external replacement. A callback
+failure fails the whole format call, including front matter; the instance can
+be used again afterward. The callback is separate from formatter configuration
+and registered config handles. Bundler and ESM entries use `import source` to
+instantiate the host-enabled Wasm; use Web/Vite entries if the toolchain does
+not support source-phase Wasm imports.

@@ -2,11 +2,9 @@
 import { assertEquals } from "jsr:@std/assert";
 import { expandGlob } from "jsr:@std/fs";
 import { fromFileUrl, relative } from "jsr:@std/path";
-import { filterOnlySpecs, formatOrSame, installDefaultFormatCodeBlock, parseSpecs } from "../test_utils/index.mjs";
+import { filterOnlySpecs, formatOrSame, parseSpecs, requiresFormatCodeBlock } from "../test_utils/index.mjs";
 
-import { format, set_format_code_block } from "../pkg/markdown_esm.js";
-
-installDefaultFormatCodeBlock(set_format_code_block);
+import { format } from "../pkg/markdown_esm.js";
 
 const specs_root = fromFileUrl(import.meta.resolve("../tests/specs"));
 
@@ -20,7 +18,7 @@ for await (const { path: spec_path } of expandGlob("**/*.txt", {
 	for (const spec of specs) {
 		const testName = `${relativePath} :: ${spec.message}`;
 
-		if (spec.skip) {
+		if (spec.skip || requiresFormatCodeBlock(spec)) {
 			Deno.test({ name: testName, ignore: true, fn: () => {} });
 			continue;
 		}

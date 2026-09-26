@@ -6,7 +6,7 @@
 	],
 	"description": "A WASM Based Markdown Formatter",
 	"version": "0.1.6",
-	"license": "MIT",
+	"license": "MIT OR Apache-2.0",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/wasm-fmt/markdown.git"
@@ -23,6 +23,15 @@
 		"markdown",
 		"formatter"
 	],
+	"dependencies": {
+		"@wasm-fmt/runtime": "0.0.1"
+	},
+	"devDependencies": {
+		"@wasm-fmt/bindgen": "0.0.1"
+	},
+	"scripts": {
+		"build:bindings": "wasm-fmt-bindgen"
+	},
 	"publishConfig": {
 		"access": "public"
 	},
@@ -53,11 +62,15 @@
 			"default": "./markdown_web.js"
 		},
 		"./vite": {
-			"types": "./markdown_web.d.ts",
+			"types": "./markdown_vite.d.ts",
 			"default": "./markdown_vite.js"
 		},
 		"./wasm": "./markdown_bg.wasm",
 		"./package.json": "./package.json",
 		"./*": "./*"
+	},
+	"author": "magic-akari <akari.ccino@gmail.com>",
+	"bugs": {
+		"url": "https://github.com/wasm-fmt/markdown/issues"
 	}
 }

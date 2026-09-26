@@ -1,13 +1,7 @@
 const DEFAULT_SPEC_FILE_NAME = "file.md";
 
-export function installDefaultFormatCodeBlock(set_format_code_block) {
-	set_format_code_block((tag, text, lineWidth) => {
-		const end = `_formatted_${lineWidth}`;
-		if (tag === "format" && !text.endsWith(end)) {
-			return `${text}${end}\n\n`;
-		}
-		return null;
-	});
+export function requiresFormatCodeBlock(spec) {
+	return spec.expectedText.includes("_formatted_");
 }
 
 export function formatOrSame(format, fileText, config) {

@@ -5,7 +5,33 @@ use dprint_core::configuration::{
 use dprint_plugin_markdown::configuration::{
     Configuration, ConfigurationBuilder, resolve_config as resolve_markdown_config,
 };
-use wasm_bindgen::prelude::*;
+
+#[bridge::config]
+#[derive(Clone)]
+pub(crate) struct MarkdownConfig(Configuration);
+
+impl Default for MarkdownConfig {
+    fn default() -> Self {
+        Self(ConfigurationBuilder::new().build())
+    }
+}
+
+impl bridge::Config for MarkdownConfig {
+    fn decode(bytes: &[u8]) -> Result<Self, String> {
+        if bytes.is_empty() {
+            return Ok(Self::default());
+        }
+
+        let config = serde_json::from_slice(bytes).map_err(|error| error.to_string())?;
+        resolve_config(config).map(Self)
+    }
+}
+
+impl MarkdownConfig {
+    pub(crate) fn resolved(&self) -> &Configuration {
+        &self.0
+    }
+}
 
 #[derive(Clone, Copy)]
 enum LayoutIndentStyle {
@@ -85,14 +111,7 @@ fn resolve_layout_global_config(
     }
 }
 
-pub(crate) fn resolve_wasm_config(config: Option<JsValue>) -> Result<Configuration, String> {
-    let Some(settings) = config else {
-        return Ok(ConfigurationBuilder::new().build());
-    };
-
-    let mut config_map: ConfigKeyMap =
-        serde_wasm_bindgen::from_value(settings).map_err(|e| e.to_string())?;
-
+fn resolve_config(mut config_map: ConfigKeyMap) -> Result<Configuration, String> {
     let global_config_result = resolve_layout_global_config(&mut config_map);
     let resolved_config = resolve_markdown_config(config_map, &global_config_result.config);
 

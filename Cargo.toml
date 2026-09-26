@@ -4,7 +4,7 @@ description = "A WASM based Markdown Formatter"
 edition     = "2024"
 homepage    = "https://github.com/wasm-fmt/markdown"
 keywords    = ["wasm", "markdown", "formatter"]
-license     = "MIT"
+license     = "MIT OR Apache-2.0"
 name        = "markdown"
 readme      = "README.md"
 repository  = "https://github.com/wasm-fmt/markdown"
@@ -12,20 +12,14 @@ version     = "0.1.6"
 
 
 [dependencies]
-anyhow                 = "1"
+bridge                 = { package = "wasm-fmt-fdk", version = "=0.0.1", features = ["host-formatting"] }
 dprint-core            = "0.67.4"
 dprint-plugin-markdown = "0.22.0"
-js-sys                 = "0.3"
-serde-wasm-bindgen     = "0.6"
-wasm-bindgen           = "0.2"
+serde_json             = "1"
 
 [dev-dependencies]
 dprint-development = "0.10.1"
 serde_json         = "1"
-
-
-	[package.metadata.wasm-pack.profile.release]
-	wasm-opt = ["-Os", "--enable-bulk-memory", "--enable-nontrapping-float-to-int"]
 
 
 [lib]
