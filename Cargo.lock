@@ -108,6 +108,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "dprint-core"
+version = "0.70.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f6c66c17f6a0648b838e9a54fcf6ce2e237d060edbd3a65a724687d563fb8f28"
+dependencies = [
+ "bumpalo",
+ "hashbrown 0.15.5",
+ "indexmap",
+ "rustc-hash",
+ "serde",
+ "unicode-width 0.2.2",
+]
+
+[[package]]
 name = "dprint-core-macros"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -137,7 +151,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a049a298ecf0d4579d1cc8875bd5c5861633006e0106c99a7c366b12c331b3d0"
 dependencies = [
  "anyhow",
- "dprint-core",
+ "dprint-core 0.67.4",
  "dprint-core-macros",
  "pulldown-cmark",
  "regex",
@@ -238,7 +252,7 @@ dependencies = [
 name = "markdown"
 version = "0.1.6"
 dependencies = [
- "dprint-core",
+ "dprint-core 0.70.0",
  "dprint-development",
  "dprint-plugin-markdown",
  "serde_json",
