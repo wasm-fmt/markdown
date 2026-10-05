@@ -16,20 +16,22 @@ fn main() {
         &RunSpecsOptions { fix_failures: false, format_twice: true },
         {
             let global_config = global_config.clone();
-            Arc::new(move |_, file_text, spec_config| {
+            Arc::new(move |_, file_text, _range, spec_config| {
                 let spec_config: ConfigKeyMap =
                     serde_json::from_value(spec_config.clone().into()).unwrap();
                 let config_result = resolve_config(spec_config, &global_config);
                 ensure_no_diagnostics(&config_result.diagnostics);
 
-                format_text(&file_text, &config_result.config, |tag, file_text, line_width| {
-                    let end = format!("_formatted_{}", line_width);
-                    if tag == "format" && !file_text.ends_with(&end) {
-                        Ok(Some(format!("{}{}\n\n", file_text.to_string(), end)))
-                    } else {
-                        Ok(None)
-                    }
-                })
+                let formatted =
+                    format_text(file_text, &config_result.config, |tag, file_text, line_width| {
+                        let end = format!("_formatted_{}", line_width);
+                        if tag == "format" && !file_text.ends_with(&end) {
+                            Ok(Some(format!("{}{}\n\n", file_text.to_string(), end)))
+                        } else {
+                            Ok(None)
+                        }
+                    })?;
+                Ok(formatted)
             })
         },
         Arc::new(move |_, _file_text, _spec_config| unimplemented!()),
